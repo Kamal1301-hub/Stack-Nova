@@ -571,8 +571,7 @@ nav {
     position: absolute;
     bottom: 30px;
     right: 20px;
-    background: white;
-    /* Clean white background */
+    background: white !important;
     padding: 16px;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
@@ -580,14 +579,13 @@ nav {
     font-size: 0.85rem;
     border: 1px solid #e5e7eb;
     min-width: 160px;
-    color: #1f2937;
-    /* Black/Charcoal text */
+    color: #111827 !important;
 }
 
 .map-legend h4 {
     margin-bottom: 12px;
     font-size: 0.9rem;
-    color: var(--primary-dark);
+    color: #111827 !important;
     border-bottom: 1px solid #eee;
     padding-bottom: 4px;
 }
@@ -597,8 +595,7 @@ nav {
     align-items: center;
     gap: 10px;
     margin-bottom: 8px;
-    color: #4b5563;
-    /* Dark gray */
+    color: #111827 !important;
 }
 
 .legend-item:last-child {
@@ -684,8 +681,7 @@ nav {
 }
 
 .dash-stat {
-    background: white;
-    /* Clean white background */
+    background: white !important;
     padding: 32px 24px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
@@ -713,8 +709,7 @@ nav {
     /* Larger label */
     font-weight: 700;
     text-transform: uppercase;
-    color: #6b7280;
-    /* Gray 500 */
+    color: #374151 !important;
     letter-spacing: 0.08em;
 }
 
@@ -722,8 +717,7 @@ nav {
     font-size: 2.75rem;
     /* Large prominent value */
     font-weight: 800;
-    color: #111827;
-    /* Near black */
+    color: #111827 !important;
     line-height: 1;
 }
 
