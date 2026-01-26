@@ -172,7 +172,14 @@ function submitReport() {
 }
 
 function displayResults(report) {
-    document.getElementById('analyzedImage').src = report.image;
+    const img = document.getElementById('analyzedImage');
+    if (report.image) {
+        img.src = report.image;
+        img.style.display = 'block';
+    } else {
+        img.style.display = 'none';
+    }
+
     document.getElementById('healthScoreDisplay').textContent = report.healthScore;
     document.getElementById('coverageDisplay').textContent = `${report.coverage}%`;
     document.getElementById('healthStatus').textContent = `Status: ${report.status}`;
