@@ -13,6 +13,13 @@ const state = {
     reports: JSON.parse(localStorage.getItem('reports') || '[]')
 };
 
+// --- One-time Reset for Demo Data ---
+if (!localStorage.getItem('demo_cleared')) {
+    localStorage.removeItem('reports');
+    localStorage.setItem('demo_cleared', 'true');
+    window.location.reload();
+}
+
 // --- Navigation ---
 // --- Navigation ---
 function navigateTo(pageId) {
@@ -151,6 +158,10 @@ function submitReport() {
         // Display Results
         displayResults(state.currentReport);
 
+        // Update Dashboard & Map
+        renderDashboard();
+        updateMapMarkers('all');
+
         // Reset Form for next time
         resetForm();
 
@@ -275,6 +286,7 @@ function flyToCity(cityName) {
 function initMap() {
     if (map) {
         map.invalidateSize();
+        updateMapMarkers('all'); // Always refresh markers when re-initializing
         return;
     }
 
@@ -460,50 +472,7 @@ function exportData() {
 document.addEventListener('DOMContentLoaded', () => {
     populateCities(); // Init dropdown
     initMap(); // Init map for scroll-based layout
+    renderDashboard(); // Ensure dashboard is populated on load
 
-    // --- FORWARD COMPATIBILITY: Force refresh if using old dataset ---
-    if (state.reports.length < 15) {
-        localStorage.removeItem('reports');
-        state.reports = [];
-    }
-
-    // Check if we need to load demo data
-    if (state.reports.length === 0) {
-        state.reports = [
-            // NORTH
-            { lat: 28.6139, lng: 77.2090, coverage: 65, healthScore: 40, status: 'Critical', type: 'River', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?q=80&w=400' },
-            { lat: 34.0837, lng: 74.7973, coverage: 45, healthScore: 55, status: 'Warning', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1580196920985-1158659d4fdd?q=80&w=400' },
-            { lat: 30.7333, lng: 76.7794, coverage: 15, healthScore: 85, status: 'Healthy', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1570191913384-7b068c291244?q=80&w=400' },
-            { lat: 26.8467, lng: 80.9462, coverage: 55, healthScore: 45, status: 'Critical', type: 'River', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1621849400072-f554417f7051?q=80&w=400' },
-            { lat: 26.4499, lng: 80.3319, coverage: 70, healthScore: 30, status: 'Critical', type: 'River', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1621849400072-f554417f7051?q=80&w=400' },
-            { lat: 27.1767, lng: 78.0081, coverage: 40, healthScore: 60, status: 'Warning', type: 'Canal', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1584288019792-50d4c1f8d424?q=80&w=400' },
-
-            // SOUTH
-            { lat: 17.4239, lng: 78.4738, coverage: 80, healthScore: 25, status: 'Emergency', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1612450800052-dc3625fdfd2b?q=80&w=400' }, // Hussainsagar
-            { lat: 12.9352, lng: 77.6693, coverage: 95, healthScore: 10, status: 'Emergency', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1584288019792-50d4c1f8d424?q=80&w=400' }, // Bellandur 
-            { lat: 13.0012, lng: 80.2565, coverage: 45, healthScore: 55, status: 'Warning', type: 'River', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1533514114760-4389f572ae26?q=80&w=400' }, // Chennai Adyar
-            { lat: 9.9312, lng: 76.2673, coverage: 5, healthScore: 98, status: 'Healthy', type: 'Canal', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=400' }, // Kerala Backwaters
-            { lat: 11.4102, lng: 76.6950, coverage: 20, healthScore: 80, status: 'Healthy', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1580196920985-1158659d4fdd?q=80&w=400' }, // Ooty
-            { lat: 10.2308, lng: 77.4859, coverage: 10, healthScore: 92, status: 'Healthy', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1580196920985-1158659d4fdd?q=80&w=400' }, // Kodaikanal
-
-            // WEST
-            { lat: 19.1176, lng: 72.9060, coverage: 85, healthScore: 20, status: 'Emergency', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1621849400072-f554417f7051?q=80&w=400' }, // Mumbai Powai
-            { lat: 18.5384, lng: 73.7820, coverage: 60, healthScore: 40, status: 'Critical', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400' }, // Pune Pashan
-            { lat: 23.0225, lng: 72.5714, coverage: 30, healthScore: 70, status: 'Warning', type: 'River', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1584288019792-50d4c1f8d424?q=80&w=400' }, // Ahmedabad
-            { lat: 24.5854, lng: 73.7125, coverage: 15, healthScore: 88, status: 'Healthy', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1580196920985-1158659d4fdd?q=80&w=400' }, // Udaipur Fateh Sagar
-            { lat: 21.1702, lng: 72.8311, coverage: 50, healthScore: 50, status: 'Warning', type: 'River', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1584288019792-50d4c1f8d424?q=80&w=400' }, // Surat
-
-            // EAST & NORTHEAST
-            { lat: 22.5726, lng: 88.3639, coverage: 40, healthScore: 60, status: 'Warning', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?q=80&w=400' }, // Kolkata Wetlands
-            { lat: 25.5941, lng: 85.1376, coverage: 65, healthScore: 35, status: 'Critical', type: 'River', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?q=80&w=400' }, // Patna Ganga
-            { lat: 26.1445, lng: 91.7362, coverage: 75, healthScore: 30, status: 'Critical', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1621849400072-f554417f7051?q=80&w=400' }, // Guwahati Deepor Beel
-            { lat: 23.3441, lng: 85.3096, coverage: 25, healthScore: 75, status: 'Warning', type: 'Pond', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1580196920985-1158659d4fdd?q=80&w=400' }, // Ranchi
-
-            // CENTRAL
-            { lat: 23.2599, lng: 77.4126, coverage: 30, healthScore: 70, status: 'Warning', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1580196920985-1158659d4fdd?q=80&w=400' }, // Bhopal Upper Lake
-            { lat: 22.7196, lng: 75.8577, coverage: 40, healthScore: 60, status: 'Warning', type: 'Pond', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1580196920985-1158659d4fdd?q=80&w=400' }, // Indore
-            { lat: 21.1458, lng: 79.0882, coverage: 20, healthScore: 80, status: 'Healthy', type: 'Lake', timestamp: new Date().toISOString(), image: 'https://images.unsplash.com/photo-1580196920985-1158659d4fdd?q=80&w=400' }  // Nagpur
-        ];
-        localStorage.setItem('reports', JSON.stringify(state.reports));
-    }
+    // Dashboard is now empty and ready for real user data
 });
