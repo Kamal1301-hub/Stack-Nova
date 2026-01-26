@@ -50,15 +50,15 @@
 
 body {
     font-family: 'Outfit', sans-serif;
-    /* Thematic Background Image with Readability Overlay */
+    /* Dark Thematic Background Image */
     background:
-        linear-gradient(rgba(240, 253, 244, 0.85), rgba(219, 234, 254, 0.85)),
-        /* Semi-transparent overlay */
+       /* linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), */
+        /* Solid dark overlay */
         url('images/eco-project%20image.jpeg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    color: var(--text-main);
+    color: white;
     min-height: 100vh;
 }
 
@@ -958,10 +958,13 @@ nav {
 }
 
 .alt-bg {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    /* Darker glass effect */
+    backdrop-filter: blur(12px);
     border-radius: var(--radius-lg);
     margin: 40px -20px;
     padding: 60px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .section-header {
@@ -971,12 +974,14 @@ nav {
 
 .section-header h2 {
     font-size: 2rem;
-    color: var(--primary-dark);
+    color: var(--primary);
+    /* Lighter green for better contrast */
     margin-bottom: 8px;
 }
 
 .section-header p {
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.8);
+    /* Lighter text for dark bg */
 }
 
 /* Impact Grid */
