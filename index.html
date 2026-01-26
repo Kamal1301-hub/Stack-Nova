@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Body Health Monitor</title>
+    <!-- SEO & Metadata -->
+    <meta name="description" content="Community-driven platform to track and report water hyacinth infestation.">
+
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="style.css?v=1.1">
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="logo"><i class='bx bxs-leaf'></i> EcoGuard</div>
+        <nav>
+            <button class="nav-btn active" onclick="navigateTo('home')">Home</button>
+            <button class="nav-btn" onclick="navigateTo('map')">Map</button>
+            <button class="nav-btn" onclick="navigateTo('dashboard')">Admin</button>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+
+        <!-- SECTION: HOME -->
+        <section id="home" class="page">
+            <div class="hero">
+                <h1>Protect Our Water Bodies</h1>
+                <p>Help us detect and clean Eichhornia infestations. Your report can save an ecosystem.</p>
+                <div class="cta-group">
+                    <button class="btn btn-primary" onclick="navigateTo('report')"><i class='bx bxs-camera'></i> Report
+                        Issue</button>
+                    <button class="btn btn-secondary" onclick="navigateTo('map')"><i class='bx bxs-map-alt'></i> View
+                        Map</button>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>120+</h3>
+                    <p>Reports Filed</p>
+                </div>
+                <div class="stat-card">
+                    <h3>45%</h3>
+                    <p>Cleaned Up</p>
+                </div>
+                <div class="stat-card">
+                    <h3>15</h3>
+                    <p>Cities Active</p>
+                </div>
+            </div>
+
+
+            <!-- SECTION: ECOSYSTEM IMPACT -->
+            <section id="impact" class="info-section">
+                <div class="section-header">
+                    <h2>Why It Matters</h2>
+                    <p>Unchecked water hyacinth growth devastates aquatic life.</p>
+                </div>
+                <div class="impact-grid">
+                    <div class="impact-card">
+                        <div class="icon-box danger"><i class='bx bxs-skull'></i></div>
+                        <h3>Oxygen Depletion</h3>
+                        <p>Thick mats block air-water interface, lowering Dissolved Oxygen (DO) levels and suffocating
+                            fish.
+                        </p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="icon-box warning"><i class='bx bxs-sun'></i></div>
+                        <h3>Sunlight Blockage</h3>
+                        <p>Prevents sunlight from reaching underwater plants, halting photosynthesis and crashing the
+                            food
+                            web.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="icon-box info"><i class='bx bxs-bug'></i></div>
+                        <h3>Disease Vector</h3>
+                        <p>Stagnant water trapped by weeds becomes a breeding ground for mosquitoes and other disease
+                            carriers.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="icon-box primary"><i class='bx bxs-tree'></i></div>
+                        <h3>Biodiversity Loss</h3>
+                        <p>Native species are displaced as the invasive weed mono-culture takes over the entire water
+                            body.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: HOW IT WORKS -->
+            <section id="how-it-works" class="info-section alt-bg">
+                <div class="section-header">
+                    <h2>How You Can Help</h2>
+                    <p>Join our community-driven monitoring network in 3 steps.</p>
+                </div>
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <img src="https://picsum.photos/id/250/400/300" alt="Take Photo">
+                        <h3>Snap & Upload</h3>
+                        <p>Take a clear photo of the suspected water body.</p>
+                    </div>
+                    <div class="step-arrow"><i class='bx bxs-chevron-right'></i></div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <img src="https://picsum.photos/id/0/400/300" alt="AI Analysis">
+                        <h3>AI Analysis</h3>
+                        <p>Our AI instantly detects weeds and estimates coverage.</p>
+                    </div>
+                    <div class="step-arrow"><i class='bx bxs-chevron-right'></i></div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <img src="https://picsum.photos/id/28/400/300" alt="Take Action">
+                        <h3>Take Action</h3>
+                        <p>Authorities are notified for critical cleanups immediately.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: GET INVOLVED -->
+            <section id="get-involved" class="info-section">
+                <div class="cta-banner">
+                    <div class="cta-content">
+                        <h2>Join the EcoGuard Network</h2>
+                        <p>Get weekly updates on water health near you and join local cleanup drives.</p>
+                        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!')">
+                            <input type="email" placeholder="Enter your email...">
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+
+
+        <!-- SECTION: REPORT WATER BODY -->
+        <section id="report" class="page">
+            <div class="page-header">
+                <h2>New Report</h2>
+                <button class="btn-text" onclick="navigateTo('home')">Cancel</button>
+            </div>
+
+            <div class="report-form">
+                <div class="upload-area" id="drop-area">
+                    <div class="upload-icon"><i class='bx bxs-cloud-upload'></i></div>
+                    <p>Tap to take photo or upload</p>
+                    <input type="file" id="fileElem" accept="image/*" capture="environment"
+                        onchange="handleFiles(this.files)">
+                </div>
+                <div id="gallery" class="gallery-preview"></div>
+
+                <div class="form-group">
+                    <label>Water Body Type</label>
+                    <select id="waterType">
+                        <option value="Lake">Lake</option>
+                        <option value="Pond">Pond</option>
+                        <option value="River">River</option>
+                        <option value="Canal">Canal</option>
+                    </select>
+                </div>
+
+                <div class="location-status" id="geoStatus">
+                    <i class='bx bx-navigation'></i> Waiting for location...
+                </div>
+
+                <button class="btn btn-primary full-width" onclick="submitReport()" disabled id="submitBtn">Analyze &
+                    Submit</button>
+            </div>
+        </section>
+
+        <!-- SECTION: ANALYSIS RESULT -->
+        <section id="analysis" class="page">
+            <div class="page-header">
+                <h2>AI Analysis Result</h2>
+            </div>
+
+            <div class="result-card">
+                <img id="analyzedImage" src="" alt="Analyzed Water Body">
+
+                <div class="score-ring-container">
+                    <div class="score-ring" id="healthRing">
+                        <span id="healthScoreDisplay">--</span>
+                        <small>Health Score</small>
+                    </div>
+                </div>
+
+                <div class="analysis-details">
+                    <h3 id="healthStatus">Analyzing...</h3>
+                    <p>Weed Coverage: <strong id="coverageDisplay">--%</strong></p>
+                    <div class="advisory" id="advisoryText"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary full-width" onclick="navigateTo('map')">View on Public Map</button>
+            <button class="btn btn-secondary full-width" onclick="navigateTo('home')">Back Home</button>
+        </section>
+
+        <!-- SECTION: PUBLIC MAP -->
+        <section id="map" class="page">
+            <div class="map-controls">
+                <button class="filter-chip active" onclick="filterMap('all', this)">All</button>
+                <button class="filter-chip critical" onclick="filterMap('critical', this)">Critical Only</button>
+                <select id="cityFilter" onchange="flyToCity(this.value)" class="city-select">
+                    <option value="">Select City / State</option>
+                    <!-- Populated by JS -->
+                </select>
+            </div>
+            <div id="map-container"></div>
+            <div class="map-legend">
+                <h4>AI Risk Legend</h4>
+                <div class="legend-item"><span class="dot emergency"></span> Emergency (>60%)</div>
+                <div class="legend-item"><span class="dot critical"></span> Critical (30-60%)</div>
+                <div class="legend-item"><span class="dot warning"></span> Warning (10-30%)</div>
+                <div class="legend-item"><span class="dot healthy"></span> Healthy (<10%)< /div>
+                </div>
+        </section>
+
+        <!-- SECTION: AUTHORITY DASHBOARD -->
+        <section id="dashboard" class="page">
+            <div class="page-header">
+                <h2>Cleanup Dashboard</h2>
+            </div>
+            <div class="dashboard-list" id="dashboardList">
+                <!-- Items injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class='bx bxs-leaf'></i> EcoGuard</div>
+            <p>Dedicated to preserving our precious water ecosystems through community action and AI technology.</p>
+            <div class="social-links">
+                <a href="#"><i class='bx bxl-facebook-circle'></i></a>
+                <a href="#"><i class='bx bxl-twitter'></i></a>
+                <a href="#"><i class='bx bxl-instagram'></i></a>
+                <a href="#"><i class='bx bxl-linkedin-square'></i></a>
+            </div>
+            <p class="copyright">&copy; 2026 Water Body Health Monitor. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- App Logic -->
+    <script src="script.js?v=1.1"></script>
+</body>
+
+</html>
