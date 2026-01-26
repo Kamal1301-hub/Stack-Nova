@@ -226,7 +226,7 @@
             </div>
             <div id="map-container"></div>
             <div class="map-legend">
-                <h4>AI Risk Legend</h4>
+                <h4>Indicator</h4>
                 <div class="legend-item"><span class="dot emergency"></span> Emergency (>60%)</div>
                 <div class="legend-item"><span class="dot critical"></span> Critical (30-60%)</div>
                 <div class="legend-item"><span class="dot warning"></span> Warning (10-30%)</div>
@@ -237,8 +237,36 @@
         <!-- SECTION: AUTHORITY DASHBOARD -->
         <section id="dashboard" class="page">
             <div class="page-header">
-                <h2>Cleanup Dashboard</h2>
+                <h2>Authority Control Center</h2>
+                <div class="header-actions">
+                    <button class="btn btn-sm btn-secondary" onclick="exportData()"><i class='bx bxs-file-export'></i>
+                        Export</button>
+                </div>
             </div>
+
+            <div class="dashboard-stats" id="dashStats">
+                <!-- Injected via JS -->
+                <div class="dash-stat">
+                    <span class="label">Total Reports</span>
+                    <span class="value">--</span>
+                </div>
+                <div class="dash-stat critical">
+                    <span class="label">Priority 1 (Emergency)</span>
+                    <span class="value">--</span>
+                </div>
+                <div class="dash-stat resolved">
+                    <span class="label">Cleared zones</span>
+                    <span class="value">--</span>
+                </div>
+            </div>
+
+            <div class="dashboard-list-header">
+                <h3>Live Incident Reports</h3>
+                <div class="list-filters">
+                    <input type="text" placeholder="Search locations..." id="dashSearch" onkeyup="filterDash()">
+                </div>
+            </div>
+
             <div class="dashboard-list" id="dashboardList">
                 <!-- Items injected via JS -->
             </div>

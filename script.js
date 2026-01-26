@@ -371,36 +371,89 @@ function filterMap(type) {
 // --- Dashboard Logic ---
 function renderDashboard() {
     const list = document.getElementById('dashboardList');
+    const statsContainer = document.getElementById('dashStats');
+    if (!list || !statsContainer) return;
+
     list.innerHTML = '';
+
+    // Calculate Stats
+    const total = state.reports.length;
+    const priority1 = state.reports.filter(r => r.status === 'Emergency' || r.status === 'Critical').length;
+    const cleared = state.reports.filter(r => r.coverage < 10).length;
+
+    statsContainer.innerHTML = `
+        <div class="dash-stat">
+            <span class="label">Total Incidents</span>
+            <span class="value">${total}</span>
+        </div>
+        <div class="dash-stat critical">
+            <span class="label">Priority Action</span>
+            <span class="value">${priority1}</span>
+        </div>
+        <div class="dash-stat resolved">
+            <span class="label">Healthy Zones</span>
+            <span class="value">${cleared}</span>
+        </div>
+    `;
 
     // Sort by Coverage (Desc)
     const sortedReports = [...state.reports].sort((a, b) => b.coverage - a.coverage);
 
     if (sortedReports.length === 0) {
-        list.innerHTML = '<p style="text-align:center; padding:1rem;">No reports yet.</p>';
+        list.innerHTML = '<p style="text-align:center; padding:2rem;">No reports found in the database.</p>';
         return;
     }
 
-    sortedReports.forEach(report => {
+    sortedReports.forEach((report, index) => {
         const item = document.createElement('div');
-        // Add class based on status for border color
-        let statusClass = 'healthy';
-        if (report.status === 'Warning') statusClass = 'warning';
-        if (report.status === 'Critical' || report.status === 'Emergency') statusClass = 'critical';
+        const statusClass = report.status.toLowerCase();
 
         item.className = `dashboard-item ${statusClass}`;
 
         const date = new Date(report.timestamp).toLocaleDateString();
 
         item.innerHTML = `
-            <div class="item-info">
-                <h4>${report.type} (${report.coverage}% Coverage)</h4>
-                <small>Reported: ${date} • Status: ${report.status}</small>
+            <img src="${report.image}" class="item-thumb" alt="Water Body">
+            <div class="item-main">
+                <span class="badge ${statusClass}">${report.status}</span>
+                <h4>${report.type} at Lat: ${report.lat.toFixed(2)}, Lng: ${report.lng.toFixed(2)}</h4>
+                <small><i class='bx bx-calendar'></i> Reported ${date} • <strong>${report.coverage}% Coverage</strong></small>
             </div>
-            <button class="btn btn-sm btn-secondary" onclick="alert('Marked for cleanup crew!')">Cleanup</button>
+            <div class="item-actions">
+                <button class="btn btn-sm btn-primary" onclick="alert('Dispatch team notified!')">Dispatch</button>
+                <button class="btn btn-sm btn-secondary" onclick="resolveReport(${index})">Clear</button>
+            </div>
         `;
         list.appendChild(item);
     });
+}
+
+function resolveReport(index) {
+    if (confirm("Mark this zone as cleared? It will be archived.")) {
+        state.reports.splice(index, 1);
+        localStorage.setItem('reports', JSON.stringify(state.reports));
+        renderDashboard();
+        updateMapMarkers('all');
+    }
+}
+
+function filterDash() {
+    const q = document.getElementById('dashSearch').value.toLowerCase();
+    const items = document.querySelectorAll('.dashboard-item');
+    items.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        item.style.display = text.includes(q) ? 'grid' : 'none';
+    });
+}
+
+function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.reports));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "ecoguard_reports.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
 }
 
 // Initialize on load
