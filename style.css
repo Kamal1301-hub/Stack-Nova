@@ -50,8 +50,13 @@
 
 body {
     font-family: 'Outfit', sans-serif;
-    /* Clean Linear Gradient */
-    background: linear-gradient(135deg, #ecfdf5 0%, #dbeafe 100%);
+    /* Thematic Background Image with Readability Overlay */
+    background:
+        linear-gradient(rgba(240, 253, 244, 0.85), rgba(219, 234, 254, 0.85)),
+        /* Semi-transparent overlay */
+        url('images/eco-project%20image.jpeg');
+    background-size: cover;
+    background-position: center;
     background-attachment: fixed;
     color: var(--text-main);
     min-height: 100vh;
