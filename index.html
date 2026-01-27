@@ -22,6 +22,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- TensorFlow.js & MobileNet for Image Validation -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
 </head>
 
 <body>
@@ -182,6 +185,8 @@
                     <i class='bx bx-navigation'></i> Waiting for location...
                 </div>
 
+                <div id="validationStatus" class="validation-message"></div>
+
                 <button class="btn btn-primary full-width" onclick="submitReport()" disabled id="submitBtn">Analyze &
                     Submit</button>
             </div>
@@ -231,7 +236,7 @@
                 <div class="legend-item"><span class="dot critical"></span> Critical (30-60%)</div>
                 <div class="legend-item"><span class="dot warning"></span> Warning (10-30%)</div>
                 <div class="legend-item"><span class="dot healthy"></span> Healthy (~10%) </div>
-                </div>
+            </div>
         </section>
 
         <!-- SECTION: AUTHORITY DASHBOARD -->

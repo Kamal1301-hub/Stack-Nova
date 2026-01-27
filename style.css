@@ -1335,3 +1335,36 @@ nav {
         /* If we had text icons but we use labels */
     }
 }
+
+/* --- VALIDATION UI --- */
+.validation-message {
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    display: none;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+}
+
+.validation-message.error {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.validation-message.success {
+    display: block;
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.validation-message.loading {
+    display: block;
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}

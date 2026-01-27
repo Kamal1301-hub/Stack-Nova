@@ -13,6 +13,13 @@ const state = {
     reports: JSON.parse(localStorage.getItem('reports') || '[]')
 };
 
+let mobilenetModel;
+async function loadModel() {
+    console.log("Loading MobileNet...");
+    mobilenetModel = await mobilenet.load();
+    console.log("MobileNet Loaded.");
+}
+
 // --- One-time Reset for Demo Data ---
 if (!localStorage.getItem('demo_cleared')) {
     localStorage.removeItem('reports');
@@ -109,66 +116,134 @@ function checkSubmitReady() {
     }
 }
 
+function showValidationMessage(message, type) {
+    const validationMsg = document.getElementById('validationStatus');
+    validationMsg.textContent = message;
+    validationMsg.style.display = 'block';
+    validationMsg.className = 'validation-message'; // Reset classes
+
+    if (type === 'error') {
+        validationMsg.classList.add('error');
+    } else if (type === 'success') {
+        validationMsg.classList.add('success');
+    } else if (type === 'loading') {
+        validationMsg.classList.add('loading');
+    }
+    // Add a timeout to hide messages after a few seconds, except for loading
+    if (type !== 'loading') {
+        setTimeout(() => {
+            validationMsg.style.display = 'none';
+        }, 5000); // Hide after 5 seconds
+    }
+}
+
 // --- AI Analysis Simulation ---
-function submitReport() {
+async function submitReport() {
     const btn = document.getElementById('submitBtn');
-    btn.textContent = "Processing AI Model...";
+    const validationMsg = document.getElementById('validationStatus');
+
+    if (!mobilenetModel) {
+        showValidationMessage("AI Model is still loading... Please wait a few seconds and try again.", "loading");
+        return;
+    }
+
+    btn.textContent = "Analyzing Image Content...";
     btn.disabled = true;
+    showValidationMessage("AI is validating image content...", "loading");
 
-    // Simulate Network Delay
-    setTimeout(() => {
-        // Mock AI Logic
-        // Random coverage between 0 and 100
-        const coverage = Math.floor(Math.random() * 100);
+    // First, validate if it's a water body
+    const imgElement = gallery.querySelector('img');
+    if (!imgElement) {
+        showValidationMessage("Please upload an image first.", "error");
+        btn.disabled = false;
+        btn.textContent = "Analyze & Submit";
+        return;
+    }
 
-        let score = 0;
-        let status = '';
-        let color = '';
+    try {
+        const predictions = await mobilenetModel.classify(imgElement);
+        console.log('Predictions: ', predictions);
 
-        // "Water Body Health Score Logic"
-        if (coverage <= 10) {
-            score = 90 + Math.floor(Math.random() * 10); // 90-100
-            status = 'Healthy';
-            color = 'green';
-        } else if (coverage <= 30) {
-            score = 60 + Math.floor(Math.random() * 29); // 60-89
-            status = 'Warning';
-            color = 'yellow';
-        } else if (coverage <= 60) {
-            score = 30 + Math.floor(Math.random() * 29); // 30-59
-            status = 'Critical';
-            color = 'orange';
-        } else {
-            score = Math.floor(Math.random() * 30); // <30
-            status = 'Emergency';
-            color = 'red';
+        const waterKeywords = [
+            'water', 'river', 'lake', 'ocean', 'sea', 'pond', 'canal', 'stream',
+            'shore', 'beach', 'seashore', 'lakeside', 'dam', 'dock', 'pier',
+            'bridge', 'valley', 'nature', 'landscape', 'waterfall', 'estuary', 'bay',
+            'swamp', 'marsh', 'wetland', 'reservoir', 'delta', 'harbor', 'marina',
+            'raft', 'boat', 'ship', 'canoe', 'kayak', 'pier', 'wharf', 'fountain'
+        ];
+
+        const isWaterBody = predictions.some(p =>
+            waterKeywords.some(kw => p.className.toLowerCase().includes(kw))
+        );
+
+        if (!isWaterBody) {
+            showValidationMessage("❌ Error: Valid water body not detected. Please upload a photo of a lake, river, or pond.", "error");
+            btn.disabled = false;
+            btn.textContent = "Analyze & Submit";
+            return;
         }
 
-        // Update State
-        state.currentReport.coverage = coverage;
-        state.currentReport.healthScore = score;
-        state.currentReport.status = status;
-        state.currentReport.timestamp = new Date().toISOString();
-        state.currentReport.type = document.getElementById('waterType').value;
+        showValidationMessage("✅ Image Validated: Water body detected.", "success");
+        btn.textContent = "Processing AI Analysis...";
+    } catch (err) {
+        console.error("AI Validation error:", err);
+        showValidationMessage("Validation bypass: Model error. Proceeding with analysis...", "loading");
+    }
 
-        // Save to LocalStorage
-        state.reports.push({ ...state.currentReport }); // copy
-        localStorage.setItem('reports', JSON.stringify(state.reports));
+    // Immediate AI Analysis (Calculated locally)
+    // Clear validation message before navigating
+    validationMsg.style.display = 'none';
 
-        // Display Results
-        displayResults(state.currentReport);
+    // Mock AI Logic
+    // Random coverage between 0 and 100
+    const coverage = Math.floor(Math.random() * 100);
 
-        // Update Dashboard & Map
-        renderDashboard();
-        updateMapMarkers('all');
+    let score = 0;
+    let status = '';
+    let color = '';
 
-        // Reset Form for next time
-        resetForm();
+    // "Water Body Health Score Logic"
+    if (coverage <= 10) {
+        score = 90 + Math.floor(Math.random() * 10); // 90-100
+        status = 'Healthy';
+        color = 'green';
+    } else if (coverage <= 30) {
+        score = 60 + Math.floor(Math.random() * 29); // 60-89
+        status = 'Warning';
+        color = 'yellow';
+    } else if (coverage <= 60) {
+        score = 30 + Math.floor(Math.random() * 29); // 30-59
+        status = 'Critical';
+        color = 'orange';
+    } else {
+        score = Math.floor(Math.random() * 30); // <30
+        status = 'Emergency';
+        color = 'red';
+    }
 
-        // Navigate
-        navigateTo('analysis');
+    // Update State
+    state.currentReport.coverage = coverage;
+    state.currentReport.healthScore = score;
+    state.currentReport.status = status;
+    state.currentReport.timestamp = new Date().toISOString();
+    state.currentReport.type = document.getElementById('waterType').value;
 
-    }, 2000);
+    // Save to LocalStorage
+    state.reports.push({ ...state.currentReport }); // copy
+    localStorage.setItem('reports', JSON.stringify(state.reports));
+
+    // Display Results
+    displayResults(state.currentReport);
+
+    // Update Dashboard & Map
+    renderDashboard();
+    updateMapMarkers('all');
+
+    // Reset Form for next time
+    resetForm();
+
+    // Navigate
+    navigateTo('analysis');
 }
 
 function displayResults(report) {
@@ -481,5 +556,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initMap(); // Init map for scroll-based layout
     renderDashboard(); // Ensure dashboard is populated on load
 
-    // Dashboard is now empty and ready for real user data
+    loadModel(); // Load MobileNet in background
 });
