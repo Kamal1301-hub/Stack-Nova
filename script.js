@@ -281,6 +281,7 @@ function displayResults(report) {
     }
 }
 
+
 function resetForm() {
     gallery.innerHTML = '';
     fileInput.value = '';
@@ -550,11 +551,16 @@ function exportData() {
     downloadAnchorNode.remove();
 }
 
+
+
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     populateCities(); // Init dropdown
     initMap(); // Init map for scroll-based layout
     renderDashboard(); // Ensure dashboard is populated on load
+    // initComparisonSlider(); // Removed
+
 
     loadModel(); // Load MobileNet in background
 });

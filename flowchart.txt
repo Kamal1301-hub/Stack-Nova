@@ -1,0 +1,69 @@
+FLOWCHART: CREATING "EXPECTED vs ACTUAL" OUTCOME CHARTS
+===================================================
+
+This guide explains the data flow and steps required to build a chart comparing 
+Expected Outcomes (AI Predictions) vs. Accurate Outcomes (Ground Truth/Manual Verification).
+
+STEP 1: DATA COLLECTION
+-----------------------
+[ User Submits Report ]
+       |
+       v
+[ AI Model Analysis ]  ----->  Generates "Expected Outcome" (e.g., Weed Coverage: 45%)
+       |
+       v
+[ Database / Storage ] ----->  Store Record: { ID: 101, Predicted: 45%, Status: Pending }
+
+
+STEP 2: VERIFICATION (GROUND TRUTH)
+-----------------------------------
+[ Authority / Admin ]  ----->  Reviews the Report Image
+       |
+       v
+[ Manual Entry ]       ----->  Inputs "Accurate Outcome" (e.g., Verified Coverage: 50%)
+       |
+       v
+[ Update Record ]      ----->  Update ID 101: { Verified: 50%, Status: Verified }
+
+
+STEP 3: DATA PROCESSING
+-----------------------
+[ Fetch Data ]         ----->  Retrieve all 'Verified' records
+       |
+       v
+[ Prepare Datasets ]   ----->  Create two arrays for the Chart:
+                               Array A (Expected): [45, 30, 60, ...]
+                               Array B (Actual):   [50, 28, 65, ...]
+                               Labels:             ["Report 101", "Report 102", ...]
+
+
+STEP 4: VISUALIZATION (IMPLEMENTATION)
+--------------------------------------
+[ Frontend (HTML/JS) ] ----->  Load Chart.js or similar library
+       |
+       v
+[ Render Chart ]       ----->  Configure Bar or Line Chart:
+                               - Dataset 1: "AI Prediction" (Color: Blue)
+                               - Dataset 2: "Actual Value"  (Color: Green)
+       |
+       v
+[ Display on UI ]      ----->  User sees side-by-side comparison bars for validation.
+
+---------------------------------------------------
+EXAMPLE CODE SNIPPET (Chart.js Concept):
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar'],
+        datasets: [{
+            label: 'Expected (AI)',
+            data: [45, 30, 60],
+            backgroundColor: 'blue'
+        }, {
+            label: 'Accurate (Actual)',
+            data: [50, 28, 65],
+            backgroundColor: 'green'
+        }]
+    }
+});

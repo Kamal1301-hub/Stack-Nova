@@ -1,20 +1,20 @@
 /* --- VARIABLES & THEME --- */
 :root {
-    /* Emerald & Sky Palette */
-    --primary: #10b981;
-    /* Emerald 500 */
-    --primary-dark: #059669;
-    /* Emerald 600 */
-    --primary-light: #d1fae5;
-    /* Emerald 100 */
+    /* Deep Forest & Lime Palette */
+    --primary: #15803d;
+    /* Green 700 */
+    --primary-dark: #14532d;
+    /* Green 900 */
+    --primary-light: #dcfce7;
+    /* Green 100 */
 
-    --accent: #3b82f6;
-    /* Blue 500 */
-    --accent-glow: rgba(59, 130, 246, 0.5);
+    --accent: #65a30d;
+    /* Lime 600 */
+    --accent-glow: rgba(101, 163, 13, 0.5);
 
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --success: #10b981;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --success: #15803d;
 
     /* Backgrounds */
     --bg-body: #f0fdf4;
